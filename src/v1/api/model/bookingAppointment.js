@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const bookingAppointment = new Schema({
+const bookingAppointmentSchema = new Schema({
     day: {
         type: Number,
         required: true
@@ -15,6 +15,9 @@ const bookingAppointment = new Schema({
         type: String,
         required: true
     },
+    amount:{
+        type:Number,
+    },
     merchantId: {
         type: String,
         required: true
@@ -26,4 +29,4 @@ const bookingAppointment = new Schema({
 })
 
 const dataModel = mongoose.model('bookingAppointment', bookingAppointmentSchema)
-module.exports = datamodel
+module.exports = dataModel

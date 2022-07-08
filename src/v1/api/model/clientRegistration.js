@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const clientRegistraion = new Schema({
+const clientRegistraionSchema = new Schema({
     clientId: {
         type: String,
         required: true
@@ -23,7 +23,7 @@ const clientRegistraion = new Schema({
         type: Number,
         required: true
     },
-    passWord: {
+    password: {
         type: String,
         required: true
     },
@@ -31,19 +31,7 @@ const clientRegistraion = new Schema({
         type: String,
         required: true
     },
-    age: {
-        type: String,
-        required: true
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    state: {
-        type: String,
-        required: true
-    },
-    address: {
+    dob: {
         type: String,
         required: true
     }
