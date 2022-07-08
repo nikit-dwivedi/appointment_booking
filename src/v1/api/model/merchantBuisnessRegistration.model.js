@@ -3,68 +3,71 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const availability = new Schema({
-    monday:{
-        type:Array,
-        },
-    tuesday:{
-        type:Array,
-        
+    monday: {
+        type: Array,
     },
-    wednesday:{
-        type:Array,
-        
-    },
-    thursday:{
-        type:Array,
-        
-    },
-    friday:{
-        type:Array,
+    tuesday: {
+        type: Array,
 
     },
-    staurday:{
-        type:Array
+    wednesday: {
+        type: Array,
+
     },
-    sunday:{
-        type:Array,
+    thursday: {
+        type: Array,
+
+    },
+    friday: {
+        type: Array,
+
+    },
+    staurday: {
+        type: Array
+    },
+    sunday: {
+        type: Array,
     }
 })
 
-const merchantBuisnessRegister =new Schema({
-    merchantid:{
-        type:String,
-        required:true
+const merchantBuisnessRegister = new Schema({
+    merchantid: {
+        type: String,
+        required: true
     },
-    profilePic:{
-        type:String
+    profilePic: {
+        type: String
     },
-    buisnessPhoto:{
-        type:Array
+    buisnessPhoto: {
+        type: Array
     },
-    designation:{
-        type:String,
-        required:true
+    buisnessName: {
+        type: String
     },
-    avalaibility:[
+    designation: {
+        type: String,
+        required: true
+    },
+    avalaibility: [
         availability
     ],
-    description:{
-        type:String,
-        required:true
+    description: {
+        type: String,
+        required: true
     },
-    location:{
-        type:String,
-        required:true
+    location: {
+        type: String,
+        required: true
     },
-    basePrice:{
-        type:String,
-        required:true
+    basePrice: {
+        type: String,
+        required: true
     },
-    clientId:{
-        type:String,
-        required:true
+    clientId: {
+        type: String,
+        required: true
     }
 })
 
-const merchantBuisnessModel = mongoose.model('merchantBuisnessRegisteration',merchantBuisnessRegister)
+const merchantBuisnessModel = mongoose.model('merchantBuisnessRegisteration', merchantBuisnessRegister)
 module.exports = merchantBuisnessModel
