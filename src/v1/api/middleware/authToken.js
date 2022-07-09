@@ -131,7 +131,7 @@ async function encryption(data) {
   return hash;
 }
 
-async function checkEncryption(encryptData, data) {
+async function checkEncryption(data,encryptData ) {
   const check = await bcrypt.compare(data, encryptData);
   return check;
 }

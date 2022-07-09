@@ -1,37 +1,43 @@
-const Mongoose = require('mongose')
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const merchantRegisterSchema = new Schema({
     merchantId:{
         type:String,
-        required:true
+         required:true
     },
     firstName:{
         type:String,
-        required:true
+         required:true
     },
     lastName:{
         type:String,
-        required:true
+         required:true
     },
     email:{
         type:String,
-        required:true
+         required:true
     },
-    Password:{
+    password:{
         type:String,
-        required:true
+         required:true
     },
     mobileNum:{
-        type:Number,
-        required:true
+        type:String,
+         required:true
     },
     merchantType:{
         type:String,
         enum:["Parapsychologist","Therapists","Terro-Card"],                                                                       
-            required:true
+             required:true
         
+    },
+    token:{type:String},
+    isLogin:{
+        type:Boolean,
+        default:false
     }
+
 })
 const merchantRegisterModel = mongoose.model('MerchantRegister',merchantRegisterSchema)
 module.exports = merchantRegisterModel
