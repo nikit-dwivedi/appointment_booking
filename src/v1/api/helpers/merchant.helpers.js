@@ -23,5 +23,21 @@ module.exports = {
         } catch (error) {
             return false
         }
+    },
+    merchantById: async (merchantId) => {
+        try {
+            const merchantData = await merchantModel.findOne({ merchantId });
+            return merchantData ? merchantData : false;
+        } catch (error) {
+            return false
+        }
+    },
+    allMerchant: async () => {
+        try {
+            const merchantData = await merchantModel.find();
+            return merchantData[0] ? merchantData : false;
+        } catch (error) {
+            return false
+        }
     }
 }

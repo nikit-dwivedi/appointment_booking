@@ -5,8 +5,10 @@ const { parseJwt, generateAdminToken, encryption, checkEncryption, } = require("
 //--------------------------------helpers-------------------------------//
 const { addAdmin, getAdminByEmail } = require("../helpers/admin.helpers");
 const { unknownError, success, badRequest, created } = require("../helpers/response.helper");
+const { allMerchant, merchantById } = require("../helpers/merchant.helpers");
 //------------------------------functions-------------------------------//
 module.exports = {
+
   addAdmin: async (req, res) => {
     const { email, password } = req.body;
     const data = { email: email, userId: "userno1" };
@@ -19,41 +21,38 @@ module.exports = {
       const error = validationResult(req);
       if (!error.isEmpty()) {
         badRequest(res, "bad request", error);
-      } else {
-        const { email, password } = req.body;
-        const data = { email: email, userId: "userno1", };
-        const token = await generateAdminToken(data);
-        success(res, "successfully login", token);
       }
+      const { email, password } = req.body;
+      const data = { email: email, userId: "userno1", };
+      const token = await generateAdminToken(data);
+      success(res, "successfully login", token);
     } catch (error) {
       unknownError(res, "unknown error");
     }
   },
 
-  getAllUsers: async (req, res) => {
+  getAllMerchant: async (req, res) => {
     try {
       const error = validationResult(req);
       if (!error.isEmpty()) {
         badRequest(res, "bad request", error);
-      } else {
-        const userData = await getAllUser();
-        if (userData) {
-          success(res, "success", userData);
-        } else {
-          badRequest(res, "bad request");
-        }
       }
+      const userData = await allMerchant();
+      userData ? success(res, "success", userData) : badRequest(res, "bad request");
     } catch (error) {
       unknownError(res, "unknown error");
     }
   },
-  allDetailOfUser: async (req, res) => {
+  
+  getMerchantById: async (req, res) => {
     try {
       const error = validationResult(req);
       if (!error.isEmpty()) {
         badRequest(res, "bad request", error);
-      } else {
       }
+      const { merchantId } = req.params;
+      const merchantData = await merchantById(merchantId);
+      merchantData ? success(res, "merchant details", merchantData) : badRequest(res, "merchant not found");
     } catch (error) {
       unknownError(res, "Unknown error");
     }
