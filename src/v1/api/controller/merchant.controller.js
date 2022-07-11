@@ -6,6 +6,7 @@ const { addMerchant } = require('../helpers/merchant.helpers')
 
 
 module.exports = {
+    
     merchantRegistration: async (req, res) => {
         try {
             const errors = validationResult(req)
@@ -29,6 +30,7 @@ module.exports = {
             unknownError(res, "unknown error");
         }
     },
+
     login: async (req, res) => {
         try {
             const errors = validationResult(req)
@@ -54,6 +56,26 @@ module.exports = {
             unknownError(res, "unknown error")
         }
     },
+
+    getUserById: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty) {
+                badRequest(res, "bad request");
+            } else {
+                const tokenData = parseJwt(req.headers.authorization)
+                const userData = await merchantModel.findOne({ merchantId: tokenData.merchantId });
+                if (userData) {
+                    success(res, "success", userData);
+                } else {
+                    badRequest(res, "user not found");
+                }
+            }
+        } catch (error) {
+            unknownError(res, "unknown error");
+        }
+    },
+
     logout: async (req, res) => {
         try {
             const errors = validationResult(req)
@@ -75,23 +97,5 @@ module.exports = {
             res.send(err.message)
         }
     },
-    getUserById: async (req, res) => {
-        try {
-            const error = validationResult(req);
-            if (!error.isEmpty) {
-                badRequest(res, "bad request");
-            } else {
-                const tokenData = parseJwt(req.headers.authorization)
-                const userData = await merchantModel.findOne({ merchantId: tokenData.merchantId });
-                if (userData) {
-                    success(res, "success", userData);
-                } else {
-                    badRequest(res, "user not found");
-                }
-            }
-        } catch (error) {
-            unknownError(res, "unknown error");
-        }
-    }
 
 }
