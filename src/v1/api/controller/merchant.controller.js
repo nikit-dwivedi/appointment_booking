@@ -18,8 +18,9 @@ module.exports = {
             if (merchantCheck) {
                 badRequest(res, "merchant already registerd");
             }
-            const saveData = addMerchant(req.body);
-            saveData ? success(res, "merchant registered successfully", saveData) : badRequest(res, "bad request");
+            const saveData = await addMerchant(req.body);
+            console.log("=======================",saveData);
+            saveData ? success(res, "merchant registered successfully",saveData) : badRequest(res, "bad request");
         } catch (err) {
             unknownError(res, "unknown error");
         }
@@ -42,7 +43,7 @@ module.exports = {
                 merchant.save()
                 success(res, "login successful", token);
             }
-            badRequest(res, "invalid email or password");
+            badRequest(res,"invalid email or password");
         } catch (err) {
             unknownError(res, "unknown error")
         }

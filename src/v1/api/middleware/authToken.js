@@ -61,7 +61,7 @@ function authenticateAdmin(req, res, next) {
       jwt.verify(token, adminPublicKEY, verifyOption);
       next();
     } catch (err) {
-      unauthorized(res, "invalid token");
+      unauthorized(res,"invalid token");
     }
   } else {
     forbidden(res, "token not found");
