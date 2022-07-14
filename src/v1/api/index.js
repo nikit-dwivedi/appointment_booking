@@ -3,7 +3,7 @@ const router = express.Router();
 
 require("./config/mongodb");
 
-const userRoute = require("./routes/user.route.js");
+const userRoute = require("./routes/client.route.js");
 const merchantRoute = require("./routes/merchant.route.js");
 const adminRoute = require("./routes/admin.route.js");
 const buissnessRoute = require('./routes/mrerchantBuissness.route');

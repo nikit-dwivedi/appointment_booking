@@ -5,7 +5,7 @@ const { encryption, generateMerchantToken } = require('../middleware/authToken')
 module.exports = {
     addMerchant: async (merchantData) => {
         try {
-            const encryptedPassword = await encryption(merchantData .password)
+            const encryptedPassword = await encryption(merchantData.password)
             const merchantId = randomBytes(4).toString('hex')
             const formattedData = {
                 merchantId: merchantId,

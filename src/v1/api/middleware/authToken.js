@@ -26,7 +26,7 @@ const verifyOption = { expiresIn: "24h", algorithm: ["PS256"] };
 //--------------------------------------------------generate------------------------------------------------//
 const generateUserToken = (user) => {
   const data = {
-    userId: user.userId,
+    clientId: user.clientId,
     email: user.email,
     role: 0,
   };
