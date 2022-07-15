@@ -37,8 +37,6 @@ module.exports = {
             const formattedData = {
                 firstName: clientData.firstName,
                 lastName: clientData.lastName,
-                email: clientData.email,
-                mobileNumber: clientData.mobileNumber,
                 gender: clientData.gender,
                 dob: clientData.dob,
             };

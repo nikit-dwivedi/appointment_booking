@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const {} = require('../controller/client.controller.js');
+const {registerClient, clientLogin, getClientById, editClientInfo} = require('../controller/client.controller.js');
 
-router.post('/register',registerUser);
+router.post('/register',registerClient);
+router.post('/login',clientLogin);
+router.get('/',getClientById);
+router.post('/update',editClientInfo)
 
 module.exports = router;
