@@ -5,6 +5,8 @@ const { badRequest, success, unknownError } = require('../helpers/response.helpe
 const { addMerchant } = require('../helpers/merchant.helpers')
 
 
+
+
 module.exports = {
 
     merchantRegistration: async (req, res) => {
@@ -19,7 +21,6 @@ module.exports = {
                 badRequest(res, "merchant already registerd");
             }
             const saveData = await addMerchant(req.body);
-            console.log("=======================",saveData);
             saveData ? success(res, "merchant registered successfully",saveData) : badRequest(res, "bad request");
         } catch (err) {
             unknownError(res, "unknown error");
@@ -80,6 +81,53 @@ module.exports = {
         } catch (err) {
             res.send(err.message)
         }
+       
+    }, 
+    editRegister: async(req,res)=>{
+        try{
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return badRequest(res,"bad request")
+            }
+            const data = {
+                firstName:req.body.firstName,
+                lastName:req.body.lastName,
+                password:req.body.password,
+                mobileNum:req.body.mobileNum,
+                merchantType:req.body.merchantType
+                
+            }
+           console.log("+===============================+",data);
+            const tokenData = parseJwt(req.headers.authorization)
+
+            const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId}, data,{new:true})
+            if(merchantData==null){
+                badRequest(res,"merchant not found")
+            }
+            else{
+            console.log(merchantData);
+            success(res,"details update sucessfully",merchantData)
+            }
+
+        }catch(err){
+            res.send(err.messgae)
+        }
     },
+    getAllMerchant: async (req,res) => {
+        try{
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return badRequest(res,"badrequest")
+            }
+            const allMerchant = await merchantModel.find()
+            console.log(allMerchant);
+            res.send({ status: true, statusCode: "200", subcode: "success", data:allMerchant })
+            
+        }catch(err){
+            console.log(err);
+          res.send(err)
+        }
+    
+}
 
 }

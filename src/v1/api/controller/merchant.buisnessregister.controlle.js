@@ -12,9 +12,11 @@ module.exports ={
             if(!errors.isEmpty()){
                 return badRequest(res,"bad request")
             } 
+            console.log("======================NOO================================");
             const {merchantId} = req.body
             console.log(merchantId);
-            const buissnessCheck = await buisnessModel.findOne({merchantId})
+            const tokenData = parseJwt(req.headers.authorization)
+            const buissnessCheck = await buisnessModel.findOne({ merchantId:tokenData. merchantId })
             if(buissnessCheck){
                 badRequest(res,"buisness already exist")
             }
@@ -34,12 +36,15 @@ module.exports ={
             return badRequest(res,"bed request")
            }
            const{buisnessId} = req.body
-           const buissnessCheck = await buisnessModel.findOne({buisnessId})
+           const tokenData = parseJwt(req.headers.authorization)
+           const buissnessCheck = await buisnessModel.findOne({buisnessId:tokenData.buisnessId})
            if(!buissnessCheck){
             badRequest(res,"pls register your buissness first")
         }
         else{
-            const updateData = updateBuissness(req.body)
+            const data = {
+                profilePic:req.body.profilePic
+            }
             success(res,"buissness details update successfully",updateData)
         }
       }catch(err){

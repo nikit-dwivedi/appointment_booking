@@ -4,32 +4,32 @@ const Schema = mongoose.Schema
 const merchantRegisterSchema = new Schema({
     merchantId: {
         type: String,
-        required: true
+        // required: true
     },
     firstName: {
         type: String,
-        required: true
+        // required: true
     },
     lastName: {
         type: String,
-        required: true
+        // required: true
     },
     email: {
         type: String,
-        required: true
+        // required: true
     },
     password: {
         type: String,
-        required: true
+        // required: true
     },
     mobileNum: {
         type: String,
-        required: true
+        // required: true
     },
     merchantType: {
         type: String,
         enum: ["Parapsychologist", "Therapists", "Terro-Card"],
-        required: true
+        // required: true
 
     },
     token: { type: String },
