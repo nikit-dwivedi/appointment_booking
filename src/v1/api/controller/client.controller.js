@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
-const { addMerchant, clientByUniqueId, addClient, checkLogin, changeLoginStatus } = require('../helpers/client.helpers')
+const { addMerchant, clientByUniqueId, addClient, checkLogin, editClient } = require('../helpers/client.helpers')
 
 
 module.exports = {
@@ -46,5 +46,18 @@ module.exports = {
         } catch (error) {
             badRequest(res, "bad request");
         }
-    }
+    },
+    editClientInfo: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                badRequest(res, "bad request");
+            }
+            const tokenData = parseJwt(req.headers.authorization);
+            const updatedInfo = await editClient(tokenData.clientId, req.body);
+            updatedInfo ? success(req, "profile updated") : badRequest(req, "bad request");
+        } catch (error) {
+            unknownError(res, "unknown error");
+        }
+    },
 }
