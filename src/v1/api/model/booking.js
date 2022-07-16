@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const bookingAppointmentSchema = new Schema({
-    day: {
+    date: {
         type: Number,
         required: true
     },
@@ -13,12 +13,21 @@ const bookingAppointmentSchema = new Schema({
     },
     status: {
         type: String,
-        required: true
+        enum: ["pending", "approved", "rejected"],
+        default: "pending"
     },
-    amount:{
-        type:Number,
+    isCompleted: {
+        type: Boolean,
+        defalut: false
+    },
+    amount: {
+        type: Number,
     },
     merchantId: {
+        type: String,
+        required: true
+    },
+    businessId: {
         type: String,
         required: true
     },
