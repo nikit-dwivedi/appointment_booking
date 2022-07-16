@@ -33,20 +33,14 @@ const merchantBuisnessRegister = new Schema({
         type: String,
         required: true
     },
-    profilePic: {
-        type: String
-    },
     buisnessPhoto: {
         type: String
     },
     buisnessName: {
         type: String
     },
-    designation: {
-        type: String,
-    },
     avalaibility: [
-        availability
+       {type: availability}
     ],
     description: {
         type: String,
@@ -57,12 +51,14 @@ const merchantBuisnessRegister = new Schema({
     basePrice: {
         type: String,
     },
-    clientId: {
+    buisnessType: {
         type: String,
+        // required: true
+
     },
-    buisnessId:{
-           type:String
-    }
+    buisnessSubtype:{
+        type:String
+    },
 })
 
 const merchantRegisterSchema = new Schema({
@@ -91,17 +87,8 @@ const merchantRegisterSchema = new Schema({
         // required: true
     },
     buisness:[
-       merchantBuisnessRegister
+       {type:merchantBuisnessRegister}
     ],
-    buisnessType: {
-        type: String,
-        // required: true
-
-    },
-    buisnessSubtype:{
-        type:String
-    },
-    token: { type: String },
     isLogin: {
         type: Boolean,
         default: false
