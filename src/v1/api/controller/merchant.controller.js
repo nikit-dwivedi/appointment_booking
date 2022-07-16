@@ -53,7 +53,7 @@ module.exports = {
     getUserById: async (req, res) => {
         try {
             const error = validationResult(req);
-            if (!error.isEmpty) {
+            if (!error.isEmpty()) {
                 badRequest(res, "bad request");
             }
             const tokenData = parseJwt(req.headers.authorization)
@@ -101,6 +101,7 @@ module.exports = {
             const tokenData = parseJwt(req.headers.authorization)
 
             const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId}, data,{new:true})
+            console.log(merchantModel);
             if(merchantData==null){
                 badRequest(res,"merchant not found")
             }

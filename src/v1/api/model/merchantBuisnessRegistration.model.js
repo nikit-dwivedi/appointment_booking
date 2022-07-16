@@ -2,33 +2,33 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-// const availability = new Schema({
-//     monday: {
-//         type: Array,
-//     },
-//     tuesday: {
-//         type: Array,
+const availability = new Schema({
+    monday: {
+        type: Array,
+    },
+    tuesday: {
+        type: Array,
 
-//     },
-//     wednesday: {
-//         type: Array,
+    },
+    wednesday: {
+        type: Array,
 
-//     },
-//     thursday: {
-//         type: Array,
+    },
+    thursday: {
+        type: Array,
 
-//     },
-//     friday: {
-//         type: Array,
+    },
+    friday: {
+        type: Array,
 
-//     },
-//     staurday: {
-//         type: Array
-//     },
-//     sunday: {
-//         type: Array,
-//     }
-// })
+    },
+    staurday: {
+        type: Array
+    },
+    sunday: {
+        type: Array,
+    }
+})
 
 const merchantBuisnessRegister = new Schema({
     merchantId: {
@@ -47,9 +47,9 @@ const merchantBuisnessRegister = new Schema({
     designation: {
         type: String,
     },
-    avalaibility: {
-        type:String
-},
+    avalaibility: [
+        availability
+    ],
     description: {
         type: String,
     },

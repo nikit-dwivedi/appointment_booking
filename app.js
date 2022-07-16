@@ -7,7 +7,7 @@ const app = express();
 //----------import files--------------------------------------
 const { badRequest } = require('./src/v1/api/helpers/response.helper')
 const version1Index = require("./src/v1/api/index");
-const merchantRouter = require('./src/v1/api/routes/merchant.route')
+
 
 
 //----------use dependencies----------------------------------
@@ -21,7 +21,7 @@ app.use(express.json());
 
 //----------redirect routes-----------------------------------
 app.use('/v1', version1Index);
-app.use('/merchant',merchantRouter)
+
 
 
 //----------for invalid requests start -----------------------
