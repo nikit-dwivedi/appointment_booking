@@ -95,7 +95,8 @@ module.exports = {
                 return badRequest(res, "bad request");
             }
             const { bookingId } = req.params;
-            const bookingData = await bookingdetailsById(bookingId);
+            const {clientId} = parseJwt(req.headers.authorization)
+            const bookingData = await bookingdetailsById(bookingId,clientId);
             return bookingData ? success(res, "booking data", bookingData) : badRequest(res, "bad request");
         } catch {
             unknownError(res, "unknow error ")

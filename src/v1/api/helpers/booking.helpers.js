@@ -61,11 +61,11 @@ module.exports = {
             return false
         }
     },
-    bookingdetailsById: async (bookingId) => {
+    bookingdetailsById: async (bookingId,clientId) => {
         try {
-            const bookingData = await bookingModel.findById( bookingId );
+            const bookingData = await bookingModel.findOne({$and:[{_id:bookingId},{clientId}]});
             return bookingData ? bookingData : false;
-        } catch {
+        } catch (error){
             return false
         }
     },
