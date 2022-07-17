@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 //send success response --------------------------------------------------------
 async function success(res, message, items) {
-    sendResponse(res, 200, true, message, '', items);
+    sendResponse(res, 200, true, message, "", items);
 };
 
 //send created response --------------------------------------------------------

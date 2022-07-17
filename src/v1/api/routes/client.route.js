@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { registerClient, clientLogin, getClientById, editClientInfo, bookAppointment, allBoooking, bookingDetails, allBoooking } = require('../controller/client.controller.js');
+const { registerClient, clientLogin, getClientById, editClientInfo, bookAppointment, bookingDetails, allBoooking } = require('../controller/client.controller.js');
 const { authenticateUser } = require("../middleware/authToken.js");
 
 router.post('/register', registerClient);

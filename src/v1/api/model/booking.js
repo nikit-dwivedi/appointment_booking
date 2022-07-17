@@ -4,11 +4,11 @@ const Schema = mongoose.Schema
 
 const bookingAppointmentSchema = new Schema({
     date: {
-        type: Number,
+        type: String,
         required: true
     },
     time: {
-        type: Number,
+        type: String,
         required: true
     },
     status: {

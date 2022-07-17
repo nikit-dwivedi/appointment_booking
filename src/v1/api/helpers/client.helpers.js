@@ -19,14 +19,22 @@ module.exports = {
             };
             const token = await generateUserToken(formattedData)
             const saveData = await clientModel(formattedData);
-            return saveData ? token : false
+            return await saveData.save() ? token : false
         } catch (err) {
             return false
         }
     },
-    clientByUniqueId: async (uniqueId) => {
+    clientByEmail: async (email) => {
         try {
-            const clientData = await clientModel.findOne({ uniqueId });
+            const clientData = await clientModel.findOne({ email });
+            return clientData ? clientData : false;
+        } catch (error) {
+            return false
+        }
+    },
+    clientById: async (clientId) => {
+        try {
+            const clientData = await clientModel.findOne({ clientId });
             return clientData ? clientData : false;
         } catch (error) {
             return false
@@ -40,8 +48,8 @@ module.exports = {
                 gender: clientData.gender,
                 dob: clientData.dob,
             };
-            const clientData = await clientModel.findOneAndUpdate({ clientId }, formattedData);
-            return clientData ? true : false;
+            const updatedData = await clientModel.findOneAndUpdate({ clientId }, formattedData);
+            return updatedData ? true : false;
         } catch (error) {
             return false
         }
@@ -71,13 +79,18 @@ module.exports = {
         }
     },
     checkLogin: async (email, password) => {
-        const clientData = await clientByUniqueId(email);
-        if (clientData) {
-            const token = await generateUserToken(clientData);
-            const passwordCheck = await checkEncryption(password, clientData.password);
-            await changeLoginStatus(clientData.clientId, true);
-            return passwordCheck ? token : false;
+        try {
+            const clientData = await clientModel.findOne({ email });
+            if (clientData) {
+                const token = await generateUserToken(clientData);
+                const passwordCheck = await checkEncryption(password, clientData.password);
+                await clientModel.findOneAndUpdate({ clientId: clientData.clientId }, { status: true });
+                return passwordCheck ? token : false;
+            }
+            return false;
         }
-        return false;
+        catch (error) {
+            return false
+        }
     }
 }

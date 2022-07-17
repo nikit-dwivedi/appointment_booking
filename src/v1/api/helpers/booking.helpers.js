@@ -1,21 +1,22 @@
 const bookingModel = require('../model/booking');
 
 module.exports = {
-    addBooking: async (bookingData,clientData) => {
+    addBooking: async (bookingData,clientId) => {
         try {
             const formatedData = {
                 businessId: bookingData.businessId,
-                clientId: clientData.clientId,
-                clientName: clientData.clientName,
-                clientNumber: clientData.clientNumber,
+                clientId: clientId,
+                merchantId:bookingData.merchantId,
+                clientName: bookingData.clientName,
+                clientNumber: bookingData.clientNumber,
                 amount: bookingData.amount,
-                date: bookingData.data,
+                date: bookingData.date,
                 time: bookingData.time
             }
             const saveData = await bookingModel(formatedData);
-            return saveData.save() ? saveData._id : false;
+            return await saveData.save() ? saveData._id : false;
         }
-        catch {
+        catch (error){
             return false;
         }
     },
@@ -24,7 +25,7 @@ module.exports = {
             const bookingData = await bookingModel.find({ clientId });
             return bookingData[0] ? bookingData : false;
         }
-        catch {
+        catch (error){
             return false
         }
     },
