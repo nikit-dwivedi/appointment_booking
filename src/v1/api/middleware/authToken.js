@@ -96,7 +96,8 @@ function authenticateMerchant(req, res, next) {
   let authHeader = req.headers.authorization;
   if (authHeader) {
     try {
-      const decode = parseJwt(authHeader);
+      const decode = parseJwt(authHeader)
+      
       const token = authHeader.split(" ")[1];
       if (decode.userRole == 2) {
         jwt.verify(token, adminPublicKEY, verifyOption);
