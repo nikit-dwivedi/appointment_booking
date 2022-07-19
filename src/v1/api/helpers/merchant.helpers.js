@@ -14,12 +14,14 @@ module.exports = {
                 email: merchantData.email,
                 password: encryptedPassword,
                 mobileNum: merchantData.mobileNum,
-                merchantType: merchantData.merchantType,
                 buisness:merchantData.buisness,
-                isLogin: true
+                isLogin: true,
+                gender:merchantData.gender
             }
+            console.log("++============+++++=================++++",formattedData);
+            // console.log("++++++++++++_____________________+++++++++++",merchantData);
             const token = await generateMerchantToken(formattedData)
-            console.log(token);
+            // console.log(token);
             const saveData = await merchantModel(formattedData);
             return saveData.save() ? token : false
         } catch (error) {
@@ -29,6 +31,7 @@ module.exports = {
     merchantById: async (merchantId) => {
         try {
             const merchantData = await merchantModel.findOne({ merchantId });
+            console.log(merchantData);
             return merchantData ? merchantData : false;
         } catch (error) {
             return false
@@ -50,7 +53,6 @@ module.exports = {
                 profilePic:buissnessData.profilePic,
                 buisnessPhoto:buissnessData.biussnessPhoto,
                 buisnessName:buissnessData.buisnessName,
-                designation:buissnessData.designation,
                 avalaibility:buissnessData.avalaibility,
                 description:buissnessData.description,
                 location:buissnessData.location,
