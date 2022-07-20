@@ -35,7 +35,7 @@ const merchantBuisnessRegister = new Schema({
     buisnessPhoto: {
         type: String
     },
-    avalaibility: 
+    availability: 
        {type: availability}
     ,
     description: {
@@ -49,14 +49,9 @@ const merchantBuisnessRegister = new Schema({
     },
     buisnessType: {
         type: String,
-        // required: true
-
-    },
-    buisnessSubtype:{
+},
+    buisnessSubType:{
         type:String
-    },
-    clientId: {
-        type: String,
     },
     buisnessId:{
            type:String
@@ -66,27 +61,26 @@ const merchantBuisnessRegister = new Schema({
 const merchantRegisterSchema = new Schema({
     merchantId: {
         type: String,
-        // required: true
+    
     },
     firstName: {
         type: String,
-        //  required: true
+        
     },
     lastName: {
         type: String,
-        // required: true
+    
     },
     email: {
         type: String,
-        //  required: true
+        
     },
     password: {
         type: String,
-        //  required: true
+        
     },
     mobileNum: {
         type: String,
-        //  required: true
     },
     buisness:
        {type:merchantBuisnessRegister}
@@ -94,8 +88,12 @@ const merchantRegisterSchema = new Schema({
     isLogin: {
         type: Boolean,
         default: false
+    },
+    gender: {
+        type: String,
+        enum: ["male", "female","other"]
     }
 
 })
-const merchantRegisterModel = mongoose.model('Merchaant', merchantRegisterSchema)
+const merchantRegisterModel = mongoose.model('Merchant', merchantRegisterSchema)
 module.exports = merchantRegisterModel
