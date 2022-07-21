@@ -2,7 +2,8 @@ const merchantModel = require('../model/merchant.models')
 const { validationResult } = require('express-validator')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
-const { addMerchant, addBuissness } = require('../helpers/merchant.helpers')
+const { addMerchant} = require('../helpers/merchant.helpers')
+
 
 
 
@@ -94,75 +95,156 @@ module.exports = {
                 console.log("----------------");
                 return badRequest(res, "bad request")
             }
-            //  const buissness = await addBuissness(req.body)
-            // console.log("+++++++++++++++++++++++++",req.body)
-            console.log("__________+");
-            const data = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                password: req.body.password,
-                mobileNum: req.body.mobileNum,
-                 buisness:{
-                  profilePic:req.body.profilePic,
-                  buisnessPhoto:req.body.buisnessPhoto,
-                     availability:{
-                        monday:req.body.monday,
-                        tuesday:req.body.tuesday,
-                        wednesday:req.body.wednesday,
-                        thursday:req.body.thursday,
-                        friday:req.body.friday,
-                        staurday:req.body.staurday,
-                        sunday:req.body.sunday,
-                        
-                 },
-                     description:req.body.description,
-                     location:req.body.location,
+            console.log("+_________________________________+");
+             const data = {
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    password: req.body.password,
+                    mobileNum: req.body.mobileNum,
+            }
+            const buisness = {
+                        profilePic:req.body.profilePic,
+                      buisnessPhoto:req.body.buisnessPhoto,
+                      description:req.body.description,
+                      location:req.body.location,
                      basePrice:req.body.basePrice,
                      buisnessType:req.body.buisness,
-                     buisnessSubType:req.body.buisnessSubType,
-                },
-              
+                    buisnessSubType:req.body.buisnessSubType,
+                    }
+                     const availability = {
+                                    monday:req.body.monday,
+                                    tuesday:req.body.tuesday,
+                                     wednesday:req.body.wednesday,
+                                    thursday:req.body.thursday,
+                                    friday:req.body.friday,
+                                    staurday:req.body.staurday,
+                                    sunday:req.body.sunday,
+                                }
+                                
 
 
-                }
-               
-                  //addBuissness:req.body.addBuissness
+
+
+
+
+
+
+
+            // const data = {
+            //         firstName: req.body.firstName,
+            //         lastName: req.body.lastName,
+            //         password: req.body.password,
+            //         mobileNum: req.body.mobileNum,
+            // }
+            // console.log("+}}}}_}+_}}",data);
+            // if(data===null){
+            //     const buisness = {
+            //         profilePic:req.body.profilePic,
+            //       buisnessPhoto:req.body.buisnessPhoto,
+            //       description:req.body.description,
+            //       location:req.body.location,
+            //      basePrice:req.body.basePrice,
+            //      buisnessType:req.body.buisness,
+            //     buisnessSubType:req.body.buisnessSubType,
+            //     }
+            //     console.log("+____________________================_+",buisness);
+            //     if(buisness == null){
+            //         const availability = {
+            //             monday:req.body.monday,
+            //             tuesday:req.body.tuesday,
+            //              wednesday:req.body.wednesday,
+            //             thursday:req.body.thursday,
+            //             friday:req.body.friday,
+            //             staurday:req.body.staurday,
+            //             sunday:req.body.sunday,
+            //         }
+            //         if(availability==null){
+            //             return badRequest(res, "merchant not found")
+            //         }else{
+            //             const tokenData = parseJwt(req.headers.authorization)
+            //             const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},data,buisness,availability,{new:true})
+            //             return success(res, "details update sucessfully", merchantData)
+            //         }
+
+            //     }else{
+            //         const tokenData = parseJwt(req.headers.authorization)
+            //         const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},data,buisness,{new:true})
+            //         return success(res, "details update sucessfully", merchantData)
+
+            //     }
+
+            // }else{
+            //     console.log("++++++++++++++++++++++++++++","LLLLLLLLLLLLLLLLLLLLLLLLLLL")
+            //     const tokenData = parseJwt(req.headers.authorization)
+            //     const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},data,{new:true})
+            //     return success(res, "details update sucessfully", merchantData)
+
             
-            // const buisness = {
-            //     profilePic:req.body.profilePic,
-            //     buisnessPhoto:req.body.buisnessPhoto,
-            //     description:req.body.description,
-            //     location:req.body.location,
-            //     basePrice:req.body.basePrice,
-            //     buisnessType:req.body.buisness,
-            //     buisnessSubType:req.body.buisnessSubType
             // }
-            // const availaibility = {
-            //     monday:req.body.monday,
-            //     tuesday:req.body.tuesday,
-            //     wednesday:req.body.wednesday,
-            //     thursday:req.body.thursday,
-            //     friday:req.body.friday,
-            //     staurday:req.body.staurday,
-            //     sunday:req.body.sunday
-            // }
-            console.log("+===============================+", data);
-            const tokenData = parseJwt(req.headers.authorization)
-                  console.log("HHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOO000000OP{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}",tokenData);
-            const merchantData = await merchantModel.findOneAndUpdate({ merchantId:tokenData.merchantId},data,{new:true })
-            console.log("+++++++++++++++++====================+++++++++++==",merchantData);
-            if (merchantData == null) {
-                return badRequest(res, "merchant not found")
-            }
-            else {
-                console.log(merchantData);
-                return success(res, "details update sucessfully", merchantData)
-            }
+
 
         } catch (err) {
             res.send(err.messgae)
         }
     },
+            //  const buissness = await addBuissness(req.body)
+            // console.log("+++++++++++++++++++++++++",req.body)
+            // console.log("__________+");
+         //const data = req.body
+            // const data = {
+            //     firstName: req.body.firstName,
+            //     lastName: req.body.lastName,
+            //     password: req.body.password,
+            //     mobileNum: req.body.mobileNum,
+            //      buisness:{
+            //       profilePic:req.body.profilePic,
+            //       buisnessPhoto:req.body.buisnessPhoto,
+            //          availability:{
+            //             monday:req.body.monday,
+            //             tuesday:req.body.tuesday,
+            //          
+            //             thursdreq.body.thursday,
+            //             friday:req.bodyiday,
+            //             staurday:req.body.staurd
+            //             sunday:req.body.sunday,                 
+            //      },
+            //       description:req.body.description,
+            //          location:req.body.location,
+            //          basePrice:req.body.basePrice,
+            //          buisnessType:req.body.buisness,
+            //          buisnessSubType:req.body.buisnessSubType,
+            //     },
+              
+
+
+            //     }
+               
+                  //addBuissness:req.body.addBuissness
+                //   if(req.body==='PUT'){
+                //     data = await merchantModel.validateAsync(req.body)
+                //     console.log("{{{{{{{{{{{{{{{{{{{*****************************))))))))))))))))))))");
+                //   }else{
+                //     data = await merchantModelForPatchRequest.validateAsync(req.body)
+                //   }
+
+        //     console.log("+===============================+", data)
+        //     const tokenData = parseJwt(req.headers.authorization)
+        //           console.log("HHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOO000000OP{{{{{{{{{{{{{{{{{{(()()()()()())()()()()()()()()())}}}}}}}}}}}}}}}}}}}");
+        //           try{
+        //     const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},{data,$set:{'data.$.buisness':data.buisness}},{new:true})    
+        //     console.log("+++++++++++++++++====================+++++++++++==");
+        //     if (merchantData == null) {
+        //         return badRequest(res, "merchant not found")
+        //     }
+        //     else {
+        //         console.log(merchantData);
+        //         return success(res, "details update sucessfully", merchantData)
+        //     }
+        // }catch(err){
+        //     console.log(err);
+        //     res.send(err)
+        //   }
+        
     getAllMerchant: async (req, res) => {
         try {
             const errors = validationResult(req)
