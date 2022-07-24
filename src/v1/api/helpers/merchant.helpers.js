@@ -14,14 +14,17 @@ module.exports = {
                 email: merchantData.email,
                 password: encryptedPassword,
                 mobileNum: merchantData.mobileNum,
-                buisness:merchantData.buisness,
-                isLogin: true,
-                gender:merchantData.gender
+                gender: merchantData.gender,
+                merchantPhoto: merchantData.merchantPhoto,
+                avalaibility: merchantData.avalaibility,
+                description: merchantData.description,
+                location: merchantData.location,
+                basePrice: merchantData.basePrice,
+                merchantType: merchantData.merchantType,
+                merchantSubType: merchantData.merchantSubType
             }
-            console.log("++============+++++=================++++",formattedData);
-            // console.log("++++++++++++_____________________+++++++++++",merchantData);
+            console.log("++============+++++=================++++", formattedData);
             const token = await generateMerchantToken(formattedData)
-            // console.log(token);
             const saveData = await merchantModel(formattedData);
             return saveData.save() ? token : false
         } catch (error) {
@@ -31,43 +34,44 @@ module.exports = {
     merchantById: async (merchantId) => {
         try {
             const merchantData = await merchantModel.findOne({ merchantId });
-            console.log(merchantData);
             return merchantData ? merchantData : false;
         } catch (error) {
             return false
         }
     },
-    allMerchant: async () => {
+    merchantCategoryList: async () => {
         try {
-            const merchantData = await merchantModel.find();
+            const categoryList = await merchantModel.find().select('merchantType -_id');
+            const categorySet = new Set(categoryList)
+            console.log(categoryList);
+            return categoryList ? categorySet : false
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
+    allMerchantByCategory: async (category) => {
+        try {
+            let filter = { 'buisness.buisnessType': category }
+            const merchantData = await merchantModel.find(filter);
             return merchantData[0] ? merchantData : false;
         } catch (error) {
             return false
         }
     },
-    addBuissness: async (buissnessData)=>{
-        try{
-            const buisnessId = randomBytes(4).toString('hex')
+    addBuissness: async (merchantId, buissnessData) => {
+        try {
             const buissnessFormattedData = {
-                // merchantId:buissnessData.merchantId,
-                profilePic:buissnessData.profilePic,
-                buisnessPhoto:buissnessData.biussnessPhoto,
-                buisnessName:buissnessData.buisnessName,
-                avalaibility:buissnessData.avalaibility,
-                description:buissnessData.description,
-                location:buissnessData.location,
-                basePrice:buissnessData.basePrice,
-                clientId:buissnessData.clientId,
-                buisnessId:buisnessId
+                buisnessPhoto: buissnessData.biussnessPhoto,
+                avalaibility: buissnessData.avalaibility,
+                description: buissnessData.description,
+                location: buissnessData.location,
+                basePrice: buissnessData.basePrice,
             }
-            
             console.log(buissnessFormattedData);
-            // const saveData = await merchantModel(buissnessFormattedData)
-            // console.log("============================",saveData); 
-            // return saveData.save()
-      
-          
-        }catch(err){
+            const saveData = await merchantModel.findOneAndUpdate(merchantId, buissnessFormattedData)
+            return saveData.save()
+        } catch (err) {
             console.log(err)
             return false
         }

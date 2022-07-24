@@ -28,15 +28,65 @@ const availability = new Schema({
     }
 })
 
-const merchantBuisnessRegister = new Schema({
-    profilePic: {
-             type: String
-             },
-    buisnessPhoto: {
+// const merchantBuisnessRegister = new Schema({
+//     profilePic: {
+//         type: String
+//     },
+//     buisnessPhoto: {
+//         type: String
+//     },
+//     availability:
+//         { type: availability }
+//     ,
+//     description: {
+//         type: String,
+//     },
+//     location: {
+//         type: String,
+//     },
+//     basePrice: {
+//         type: String,
+//     },
+//     buisnessType: {
+//         type: String,
+//     },
+//     buisnessSubType: {
+//         type: String
+//     },
+//     buisnessId: {
+//         type: String
+//     }
+// })
+
+const merchantRegisterSchema = new Schema({
+    merchantId: {
+        type: String,
+
+    },
+    firstName: {
+        type: String,
+
+    },
+    lastName: {
+        type: String,
+
+    },
+    email: {
+        type: String,
+
+    },
+    password: {
+        type: String,
+
+    },
+    mobileNum: {
+        type: String,
+    },
+    merchantPhoto: {
         type: String
     },
-    availability: 
-       {type: availability}
+    availability:
+        { type: availability }
     ,
     description: {
         type: String,
@@ -47,51 +97,19 @@ const merchantBuisnessRegister = new Schema({
     basePrice: {
         type: String,
     },
-    buisnessType: {
-        type: String,
-},
-    buisnessSubType:{
-        type:String
-    },
-    buisnessId:{
-           type:String
-    }
-})
-
-const merchantRegisterSchema = new Schema({
-    merchantId: {
-        type: String,
-    
-    },
-    firstName: {
-        type: String,
-        
-    },
-    lastName: {
-        type: String,
-    
-    },
-    email: {
-        type: String,
-        
-    },
-    password: {
-        type: String,
-        
-    },
-    mobileNum: {
+    merchantType: {
         type: String,
     },
-    buisness:
-       {type:merchantBuisnessRegister}
-    ,
+    merchantSubType: {
+        type: String
+    },
     isLogin: {
         type: Boolean,
         default: false
     },
     gender: {
         type: String,
-        enum: ["male", "female","other"]
+        enum: ["male", "female", "other"]
     }
 
 })

@@ -1,8 +1,9 @@
 const { validationResult } = require('express-validator')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
-const { addClient, checkLogin, editClient, clientByEmail,clientById } = require('../helpers/client.helpers')
+const { addClient, checkLogin, editClient, clientByEmail, clientById } = require('../helpers/client.helpers')
 const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
+const { allMerchantByCategory, merchantCategoryList } = require('../helpers/merchant.helpers')
 
 
 module.exports = {
@@ -62,16 +63,45 @@ module.exports = {
             return unknownError(res, "unknown error");
         }
     },
+    homeScreen: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request");
+            }
+            const data = {
+                categoryList: await merchantCategoryList(),
+                feturedMerchant: [],
+                testomony: []
+            }
+            return data.categoryList ? success(res, "success", data) : badRequest(res, "bad request");
+        } catch (error) {
+            return unknownError(res, "unknown error");
+        }
+    },
+    getAllMerchantByCategory: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request");
+            }
+            const { category } = req.params
+            const merchantList = await allMerchantByCategory(category);
+            return merchantList ? success(res, "all merchant list", merchantList) : success(res, "no merchant found", []);
+        } catch (error) {
+            return unknownError(res, "unknown error")
+        }
+    },
     bookAppointment: async (req, res) => {
         try {
             const error = validationResult(req);
-            if (!error.isEmpty()) { 
+            if (!error.isEmpty()) {
                 return badRequest(res, "bad request");
             }
             const tokenData = parseJwt(req.headers.authorization);
             const bookingData = await addBooking(req.body, tokenData.clientId);
             return bookingData ? success(res, "booking done", bookingData) : badRequest(res, "bad request");
-        } catch (error){
+        } catch (error) {
             return unknownError(res, "unknown error");
         }
     },
@@ -83,7 +113,7 @@ module.exports = {
             }
             const tokenData = parseJwt(req.headers.authorization);
             const bookingData = await getClientBooking(tokenData.clientId);
-            return bookingData ? success(res, "booking done", bookingData) : success(res, "no booking found",[]);
+            return bookingData ? success(res, "booking done", bookingData) : success(res, "no booking found", []);
         } catch {
             return unknownError(res, "unknown error");
         }
@@ -95,8 +125,8 @@ module.exports = {
                 return badRequest(res, "bad request");
             }
             const { bookingId } = req.params;
-            const {clientId} = parseJwt(req.headers.authorization)
-            const bookingData = await bookingdetailsById(bookingId,clientId);
+            const { clientId } = parseJwt(req.headers.authorization)
+            const bookingData = await bookingdetailsById(bookingId, clientId);
             return bookingData ? success(res, "booking data", bookingData) : badRequest(res, "bad request");
         } catch {
             unknownError(res, "unknow error ")
