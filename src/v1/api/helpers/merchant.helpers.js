@@ -7,6 +7,8 @@ module.exports = {
         try {
             const encryptedPassword = await encryption(merchantData.password)
             const merchantId = randomBytes(4).toString('hex')
+            const buisnessId = randomBytes(4).toString('hex')
+            
             const formattedData = {
                 merchantId: merchantId,
                 firstName: merchantData.firstName,
@@ -16,7 +18,10 @@ module.exports = {
                 mobileNum: merchantData.mobileNum,
                 buisness:merchantData.buisness,
                 isLogin: true,
-                gender:merchantData.gender
+                gender:merchantData.gender,
+                buisnessId:buisnessId
+                
+
             }
             console.log("++============+++++=================++++",formattedData);
             // console.log("++++++++++++_____________________+++++++++++",merchantData);
@@ -45,31 +50,5 @@ module.exports = {
             return false
         }
     },
-    addBuissness: async (buissnessData)=>{
-        try{
-            const buisnessId = randomBytes(4).toString('hex')
-            const buissnessFormattedData = {
-                // merchantId:buissnessData.merchantId,
-                profilePic:buissnessData.profilePic,
-                buisnessPhoto:buissnessData.biussnessPhoto,
-                buisnessName:buissnessData.buisnessName,
-                avalaibility:buissnessData.avalaibility,
-                description:buissnessData.description,
-                location:buissnessData.location,
-                basePrice:buissnessData.basePrice,
-                clientId:buissnessData.clientId,
-                buisnessId:buisnessId
-            }
-            
-            console.log(buissnessFormattedData);
-            // const saveData = await merchantModel(buissnessFormattedData)
-            // console.log("============================",saveData); 
-            // return saveData.save()
-      
-          
-        }catch(err){
-            console.log(err)
-            return false
-        }
-    }
+   
 }

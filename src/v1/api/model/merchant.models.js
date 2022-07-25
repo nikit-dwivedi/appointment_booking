@@ -52,9 +52,6 @@ const merchantBuisnessRegister = new Schema({
 },
     buisnessSubType:{
         type:String
-    },
-    buisnessId:{
-           type:String
     }
 })
 
@@ -92,6 +89,9 @@ const merchantRegisterSchema = new Schema({
     gender: {
         type: String,
         enum: ["male", "female","other"]
+    },
+    buisnessId:{
+           type:String
     }
 
 })

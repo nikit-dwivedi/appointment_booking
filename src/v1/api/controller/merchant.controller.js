@@ -1,5 +1,7 @@
 const merchantModel = require('../model/merchant.models')
+const {clientById} = require('../helpers/client.helpers')
 const { validationResult } = require('express-validator')
+const bookingModel = require('../model/booking')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addMerchant} = require('../helpers/merchant.helpers')
@@ -11,7 +13,8 @@ const { addMerchant} = require('../helpers/merchant.helpers')
 module.exports = {
 
     merchantRegistration: async (req, res) => {
-        try {
+        try 
+        {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return badRequest(res, "bad request");
@@ -44,11 +47,11 @@ module.exports = {
                 const token = await generateMerchantToken(merchant)
                 merchant.isLogin = true
                 merchant.save()
-                return success(res, "login successful", token);
+                return success(res,"login successful", token);
             }
-            return badRequest(res, "invalid email or password");
+            return badRequest(res,"invalid email or password");
         } catch (err) {
-            return unknownError(res, "unknown error")
+            return unknownError(res,"unknown error")
         }
     },
 
@@ -78,7 +81,7 @@ module.exports = {
             if (merchantData.isLogin) {
                 merchantData.isLogin = false
                 merchantData.save()
-                success(res, "logout successful")
+               return success(res, "logout successful")
             }
             return badRequest(res, "you need to login first")
         } catch (err) {
@@ -96,32 +99,54 @@ module.exports = {
                 return badRequest(res, "bad request")
             }
             console.log("+_________________________________+");
-             const data = {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    password: req.body.password,
-                    mobileNum: req.body.mobileNum,
-            }
-            const buisness = {
-                        profilePic:req.body.profilePic,
-                      buisnessPhoto:req.body.buisnessPhoto,
-                      description:req.body.description,
-                      location:req.body.location,
-                     basePrice:req.body.basePrice,
-                     buisnessType:req.body.buisness,
-                    buisnessSubType:req.body.buisnessSubType,
-                    }
-                     const availability = {
-                                    monday:req.body.monday,
-                                    tuesday:req.body.tuesday,
-                                     wednesday:req.body.wednesday,
-                                    thursday:req.body.thursday,
-                                    friday:req.body.friday,
-                                    staurday:req.body.staurday,
-                                    sunday:req.body.sunday,
-                                }
+            //  const data = {
+            //         firstName: req.body.firstName,
+            //         lastName: req.body.lastName,
+            //         password: req.body.password,
+            //         mobileNum: req.body.mobileNum,
+            // }
+            // const buisness = {
+            //          profilePic:req.body.profilePic,
+            //          buisnessPhoto:req.body.buisnessPhoto,
+            //          description:req.body.description,
+            //          location:req.body.location,
+            //          basePrice:req.body.basePrice,
+            //          buisnessType:req.body.buisness,
+            //          buisnessSubType:req.body.buisnessSubType,
+            //         }
+            //          const availability = {
+            //                         monday:req.body.monday,
+            //                         tuesday:req.body.tuesday,
+            //                          wednesday:req.body.wednesday,
+            //                         thursday:req.body.thursday,
+            //                         friday:req.body.friday,
+            //                         staurday:req.body.staurday,
+            //                         sunday:req.body.sunday,
+            //                     }
                                 
-
+                 const tokenData = parseJwt(req.headers.authorization)
+                const merchantData = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},{
+                     firstName: req.body.firstName,
+                     lastName: req.body.lastName,
+                     password: req.body.password,
+                     mobileNum: req.body.mobileNum,
+                     profilePic:req.body.profilePic,
+                    buisnessPhoto:req.body.buisnessPhoto,
+                    description:req.body.description,
+                    location:req.body.location,
+                    basePrice:req.body.basePrice,
+                    buisnessType:req.body.buisness,
+                    buisnessSubType:req.body.buisnessSubType,
+                    monday:req.body.monday,
+                    tuesday:req.body.tuesday,
+                    wednesday:req.body.wednesday,
+                    thursday:req.body.thursday,
+                    friday:req.body.friday,
+                    staurday:req.body.staurday,
+                     sunday:req.body.sunday
+                                             },{new:true})
+                                             return success(res, "details update sucessfully", merchantData)
+                                
 
 
 
@@ -187,10 +212,10 @@ module.exports = {
             res.send(err.messgae)
         }
     },
-            //  const buissness = await addBuissness(req.body)
+            // const buissness = await addBuissness(req.body)
             // console.log("+++++++++++++++++++++++++",req.body)
             // console.log("__________+");
-         //const data = req.body
+            // const data = req.body
             // const data = {
             //     firstName: req.body.firstName,
             //     lastName: req.body.lastName,
@@ -261,34 +286,6 @@ module.exports = {
         }
 
     },
-     //buissnessRegister: async (req, res) => {
-    //     try {
-    //         const errors = validationResult(req)
-    //         if (!errors.isEmpty()) {
-    //             return badRequest(res, "bad request")
-    //         }
-    //         // const { merchantId } = req.body
-    //         // console.log(merchantId);
-    //         const tokenData = parseJwt(req.headers.authorization)
-    //     const buissnessCheck = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId}, addBuissness,{new:true})
-    //     console.log(buissnessCheck);
-    //     // console.log(addBuissness);
-    //         if (buissnessCheck==null) {
-    //             console.log(buissnessCheck);
-    //             return badRequest(res, "buisness not found")
-    //         }
-    //         else {
-    //             const saveData = await addBuissness(req.body);
-    //             success(res,"details update sucessfully",saveData,buissnessCheck)
-    //                 console.log(saveData);
-    //         }
-
-
-    //     } catch (err) {
-    //         console.log(err);
-    //         unknownError(res, "unknown error")
-    //     }
-    // },
     // getBuisnessById: async (req, res) => {
     //     try {
     //         const error = validationResult(req)
@@ -303,5 +300,42 @@ module.exports = {
     //         unknownError(res, "unknown error")
     //     }
     // }
+
+    changeStatus: async (req,res) =>{
+        try{
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return badRequest(res,"badRequest")
+            }
+            const data ={ 
+                       clientId:req.body.clientId,
+                       status:req.body.status
+            }
+            console.log("sssssssssssssddfffffffffffff",data);
+            
+            const clientData = await clientById()
+            console.log(clientData.clientId)
+            if(data.clientId===clientData.clientId){
+                console.log(data.status)
+               const finalStatus = await  bookingModel.findOneAndUpdate(tokenData.merchantId,data.status,{new:true})
+             console.log(")(*(*(*&((*)",finalStatus.status);
+                console.log("your request approved",finalStatus)
+                res.send({ status: true, statusCode: "200", subcode: "success", data:finalStatus})
+            }
+        else{
+            res.send("something went wrong")
+        }
+
+
+        }catch(err){
+            res.send(err)
+        }
+    }
+
+
+
+
+
+
 
 }
