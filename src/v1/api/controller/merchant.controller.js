@@ -4,6 +4,7 @@ const bookindAppoinment = require('../model/booking')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addMerchant} = require('../helpers/merchant.helpers')
+const { changeBookingStatus } = require('../helpers/booking.helpers')
     
 
 
@@ -124,7 +125,7 @@ module.exports = {
             }
             const allMerchant = await merchantModel.find()
             console.log(allMerchant);
-            return allerchant ? success(res,"all merchanr",allMerchant):badRequest(res,"something went wrong")
+            return allmerchant ? success(res,"all merchanr",allMerchant):badRequest(res,"something went wrong")
 
         } catch (err) {
             console.log(err);
@@ -139,20 +140,20 @@ module.exports = {
                 return badRequest(res,"bad Request")
             }
             const data ={
-                merchantId:req.body.merchantId,
+                bookingId:req.body.bookingId,
                 status:req.body.status
             }
-            const tokenData = parseJwt(req.headers.authorization)
-            const id = await merchantModel.findOne({merchantId:tokenData.merchantId})
-            if(data.merchantId===id){
-                const changeBookingStatus = await bookindAppoinment.findByIdAndUpdate({merchantId:tokenData.merchantId},data.status,{new:true})
-            return booking ? success(res,"bookin status change successfully",changeBookingStatus):badRequest(res,"bad Request")
+            console.log(data);
+                const changeBookingStatus = await bookindAppoinment.findByIdAndUpdate(data.bookingId,data,{new:true})
+                console.log(changeBookingStatus.id);
+                if(data.bookingId===changeBookingStatus.id){
+            return changeBookingStatus ? success(res,"bookin status change successfully",changeBookingStatus):badRequest(res,"bad Request")
             }
             else{
                 return badRequest(res,"pls emnter valid id")
             }
         }catch(err){
-            return badRequest(err,"something went  wrong")
+            return badRequest(res,"something went  wrong")
                  }
     },
   
