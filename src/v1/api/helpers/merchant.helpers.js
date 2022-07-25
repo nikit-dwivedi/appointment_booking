@@ -16,7 +16,7 @@ module.exports = {
                 mobileNum: merchantData.mobileNum,
                 gender: merchantData.gender,
                 merchantPhoto: merchantData.merchantPhoto,
-                avalaibility: merchantData.avalaibility,
+                availability: merchantData.availability,
                 description: merchantData.description,
                 location: merchantData.location,
                 basePrice: merchantData.basePrice,
@@ -75,5 +75,6 @@ module.exports = {
             console.log(err)
             return false
         }
-    }
+    },
+    
 }

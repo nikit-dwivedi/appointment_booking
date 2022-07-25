@@ -46,7 +46,7 @@ module.exports = {
     },
     changeBookingStatus: async (businessId, status) => {
         try {
-            const statusChange = await bookingModel.findOneAndUpdate({ businessId }, { status });
+            const statusChange = await bookingModel.findOneAndUpdate({ merchantId }, { status });
             return statusChange ? true : false;
         } catch {
             return false
