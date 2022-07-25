@@ -27,10 +27,6 @@ const bookingAppointmentSchema = new Schema({
         type: String,
         required: true
     },
-    businessId: {
-        type: String,
-        required: true
-    },
     clientId: {
         type: String,
         required: true

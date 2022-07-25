@@ -4,7 +4,6 @@ module.exports = {
     addBooking: async (bookingData,clientId) => {
         try {
             const formatedData = {
-                businessId: bookingData.businessId,
                 clientId: clientId,
                 merchantId:bookingData.merchantId,
                 clientName: bookingData.clientName,

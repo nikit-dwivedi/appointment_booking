@@ -52,7 +52,7 @@ module.exports = {
     },
     allMerchantByCategory: async (category) => {
         try {
-            let filter = { 'buisness.buisnessType': category }
+            let filter = { merchantType: category }
             const merchantData = await merchantModel.find(filter);
             return merchantData[0] ? merchantData : false;
         } catch (error) {
