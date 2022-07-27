@@ -12,6 +12,7 @@ const adminRoute = require("./routes/admin.route.js");
 router.use("/user", userRoute);
 router.use("/merchant", merchantRoute);
 router.use("/admin", adminRoute);
+
 // router.use("/buissnessRegister",buissnessRoute)
 
 module.exports = router;

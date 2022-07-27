@@ -3,9 +3,9 @@ const { validationResult } = require('express-validator')
 const bookindAppoinment = require('../model/booking')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
-const { addMerchant} = require('../helpers/merchant.helpers')
-const { changeBookingStatus } = require('../helpers/booking.helpers')
-    
+const { addMerchant, merchantCategoryList, merchantByEmail, merchantById, editMerchant } = require('../helpers/merchant.helpers')
+const { changeBookingStatus, markBookingDone } = require('../helpers/booking.helpers')
+
 
 
 
@@ -25,7 +25,6 @@ module.exports = {
                 return badRequest(res, "merchant already registerd");
             }
             const saveData = await addMerchant(req.body);
-            console.log("================>",req.body);
             return saveData ? success(res, "merchant registered successfully", saveData) : badRequest(res, "bad request");
         } catch (err) {
             return unknownError(res, "unknown error");
@@ -39,12 +38,12 @@ module.exports = {
                 return badRequest(res, "bad request")
             }
             const { email, password } = req.body
-            const merchant = await merchantModel.findOne({ email })
+            const merchant = await merchantByEmail(email)
             if (!merchant) {
                 return badRequest(res, "invalid email or password");
             }
             if (await checkEncryption(password, merchant.password)) {
-                const token = await generateMerchantToken(merchant)
+                const token = generateMerchantToken(merchant)
                 merchant.isLogin = true
                 merchant.save()
                 return success(res, "login successful", token);
@@ -54,22 +53,32 @@ module.exports = {
             return unknownError(res, "unknown error")
         }
     },
+    getMerchantCategory: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request");
+            }
+            const categoryList = await merchantCategoryList();
+            return categoryList ? success(res, "success", categoryList) : badRequest(res, "bad request");
+        } catch (error) {
+            return unknownError(res, "unknown error");
+        }
+    },
 
-    getUserById: async (req, res) => {
+    getMerchantById: async (req, res) => {
         try {
             const error = validationResult(req);
             if (!error.isEmpty()) {
                 badRequest(res, "bad request");
             }
             const tokenData = parseJwt(req.headers.authorization)
-            const userData = await merchantModel.findOne({ merchantId: tokenData.merchantId });
-            console.log(userData);
-            return userData ? success(res, "success", userData) : badRequest(res, "user not found");
+            const merchantData = await merchantById(tokenData.merchantId);
+            return merchantData ? success(res, "success", merchantData) : badRequest(res, "user not found");
         } catch (error) {
             return unknownError(res, "unknown error");
         }
     },
-
     logout: async (req, res) => {
         try {
             const errors = validationResult(req)
@@ -77,7 +86,7 @@ module.exports = {
                 return badRequest(res, "bad request")
             }
             const tokenData = parseJwt(req.headers.authorization)
-            const merchantData = await merchantModel.findOne({ merchantId: tokenData.merchantId })
+            const merchantData = await merchantById(tokenData.merchantId);
             if (merchantData.isLogin) {
                 merchantData.isLogin = false
                 merchantData.save()
@@ -89,31 +98,16 @@ module.exports = {
         }
 
     },
-    editRegister: async (req, res) => {
+    editMerchantDetails: async (req, res) => {
         try {
-            console.log("----------------------");
             const errors = validationResult(req)
-            console.log("+=_________=+");
             if (!errors.isEmpty()) {
-                console.log("----------------");
                 return badRequest(res, "bad request")
             }
-            const data = req.body
-            const finaldata = {
-                monday:req.body.monday,
-                tuesday:req.body.tuesday,
-                wednesday:req.body.wednesday,
-                thursday:req.body.thursday,
-                friday:req.body.friday,
-                staurday:req.body.staurday,
-                sunday:req.body.sunday
-
-            }
-            const tokenData = parseJwt(req.headers.authorization);
-            const editMerchant = await merchantModel.findOneAndUpdate({merchantId:tokenData.merchantId},data,{new:true})
-            return editMerchant ?  success(res,"details update sucessfully",editMerchant): badRequest(res,"bad Request ")
-
-        }catch(err){
+            const {merchantId} = parseJwt(req.headers.authorization);
+            const editedData = await editMerchant(merchantId, req.body);
+            return editedData ? success(res, "details update sucessfully") : badRequest(res, "bad Request ")
+        } catch (err) {
             res.send(err.message)
         }
     },
@@ -125,7 +119,7 @@ module.exports = {
             }
             const allMerchant = await merchantModel.find()
             console.log(allMerchant);
-            return allmerchant ? success(res,"all merchanr",allMerchant):badRequest(res,"something went wrong")
+            return allmerchant ? success(res, "all merchanr", allMerchant) : badRequest(res, "something went wrong")
 
         } catch (err) {
             console.log(err);
@@ -133,30 +127,20 @@ module.exports = {
         }
 
     },
-    changeBooking: async(req,res)=>{
-        try{
+    changeStatus: async (req, res) => {
+        try {
             const errors = validationResult(req)
-            if(!errors.isEmpty()){
-                return badRequest(res,"bad Request")
+            if (!errors.isEmpty()) {
+                return badRequest(res, "bad Request")
             }
-            const data ={
-                bookingId:req.body.bookingId,
-                status:req.body.status
+            const { bookingId, status } = req.body
+            if (status == "rejected") {
+                await markBookingDone(bookingId, status);
             }
-            console.log(data);
-                const changeBookingStatus = await bookindAppoinment.findByIdAndUpdate(data.bookingId,data,{new:true})
-                console.log(changeBookingStatus.id);
-                if(data.bookingId===changeBookingStatus.id){
-            return changeBookingStatus ? success(res,"bookin status change successfully",changeBookingStatus):badRequest(res,"bad Request")
-            }
-            else{
-                return badRequest(res,"pls emnter valid id")
-            }
-        }catch(err){
-            return badRequest(res,"something went  wrong")
-                 }
+            const changeStatus = await changeBookingStatus(bookingId, status)
+            return changeStatus ? success(res, "bookin status change successfully") : badRequest(res, "bad Request")
+        } catch (err) {
+            return badRequest(res, "something went  wrong")
+        }
     },
-  
-
-    
 }

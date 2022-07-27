@@ -44,17 +44,17 @@ module.exports = {
             return false;
         }
     },
-    changeBookingStatus: async (businessId, status) => {
+    changeBookingStatus: async (bookingId, status) => {
         try {
-            const statusChange = await bookingModel.findOneAndUpdate({ merchantId }, { status });
+            const statusChange = await bookingModel.findByIdAndUpdate( bookingId , { status });
             return statusChange ? true : false;
         } catch {
             return false
         }
     },
-    markBookingDone: async (businessId) => {
+    markBookingDone: async (bookingId) => {
         try {
-            const statusChange = await bookingModel.findOneAndUpdate({ businessId }, { isCompleted: true });
+            const statusChange = await bookingModel.findByIdAndUpdate(bookingId, { isCompleted: true });
             return statusChange ? true : false;
         } catch {
             return false
@@ -68,4 +68,9 @@ module.exports = {
             return false
         }
     },
+    changeAvailability:async (merchantId,bodyData)=>{
+        const formatedData={
+            
+        }
+    }
 }

@@ -1,6 +1,9 @@
 const merchantModel = require('../model/merchant.models');
+const categoryModel = require('../model/merchantCategory.model')
+const bookingModel = require('../model/booking');
 const { randomBytes } = require('crypto');
 const { encryption, generateMerchantToken } = require('../middleware/authToken');
+const { sort } = require('../service/funtions');
 
 module.exports = {
     addMerchant: async (merchantData) => {
@@ -14,19 +17,26 @@ module.exports = {
                 email: merchantData.email,
                 password: encryptedPassword,
                 mobileNum: merchantData.mobileNum,
-                gender: merchantData.gender,
                 merchantPhoto: merchantData.merchantPhoto,
                 availability: merchantData.availability,
+                gender: merchantData.gender,
                 description: merchantData.description,
                 location: merchantData.location,
                 basePrice: merchantData.basePrice,
                 merchantType: merchantData.merchantType,
                 merchantSubType: merchantData.merchantSubType
             }
-            console.log("++============+++++=================++++", formattedData);
             const token = await generateMerchantToken(formattedData)
             const saveData = await merchantModel(formattedData);
             return saveData.save() ? token : false
+        } catch (error) {
+            return false
+        }
+    },
+    merchantByEmail: async (email) => {
+        try {
+            const merchantData = await merchantModel.findOne({ email });
+            return merchantData ? merchantData : false;
         } catch (error) {
             return false
         }
@@ -41,10 +51,8 @@ module.exports = {
     },
     merchantCategoryList: async () => {
         try {
-            const categoryList = await merchantModel.find().select('merchantType -_id');
-            const categorySet = new Set(categoryList)
-            console.log(categoryList);
-            return categoryList ? categorySet : false
+            const categoryList = await categoryModel.find().select('-_id -__v');
+            return categoryList ? categoryList : false
         } catch (error) {
             console.log(error);
             return false;
@@ -59,22 +67,36 @@ module.exports = {
             return false
         }
     },
-    addBuissness: async (merchantId, buissnessData) => {
+    editMerchant: async (merchantId, bodyData) => {
         try {
-            const buissnessFormattedData = {
-                buisnessPhoto: buissnessData.biussnessPhoto,
-                avalaibility: buissnessData.avalaibility,
-                description: buissnessData.description,
-                location: buissnessData.location,
-                basePrice: buissnessData.basePrice,
+            const FormattedData = {
+                firstName: bodyData.firstName,
+                lastName: bodyData.lastName,
+                merchantPhoto: bodyData.merchantPhoto,
+                description: bodyData.description,
+                basePrice: bodyData.basePrice,
+                location: bodyData.location,
             }
-            console.log(buissnessFormattedData);
-            const saveData = await merchantModel.findOneAndUpdate(merchantId, buissnessFormattedData)
-            return saveData.save()
+            const saveData = await merchantModel.findOneAndUpdate({ merchantId }, FormattedData)
+            return saveData.save() ? true : false
         } catch (err) {
             console.log(err)
             return false
         }
     },
-    
+    getAvalableSlot: async (merchantId, date) => {
+        try {
+            let dateData = new Date(date)
+            let day = dateData.toString().split(" ")[0]
+            const bookingData = await bookingModel.find({ merchantId, date }).select("time -_id")
+            const { availability } = await merchantModel.findOne({ merchantId }).select(`availability.${day} -_id`)
+            const bookedSlot = bookingData.map(({ time }) => time)
+            const servingSlot = availability[`${day}`]
+            const sortedArray = sort(bookedSlot,servingSlot)
+            return sortedArray
+        } catch (error) {
+            return false
+        }
+    }
+
 }

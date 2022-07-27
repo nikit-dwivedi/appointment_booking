@@ -3,7 +3,7 @@ const { generateMerchantToken, checkEncryption, parseJwt } = require('../middlew
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addClient, checkLogin, editClient, clientByEmail, clientById } = require('../helpers/client.helpers')
 const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
-const { allMerchantByCategory, merchantCategoryList } = require('../helpers/merchant.helpers')
+const { allMerchantByCategory, merchantCategoryList, getAvalableSlot } = require('../helpers/merchant.helpers')
 
 
 module.exports = {
@@ -130,6 +130,19 @@ module.exports = {
             return bookingData ? success(res, "booking data", bookingData) : badRequest(res, "bad request");
         } catch {
             unknownError(res, "unknow error ")
+        }
+    },
+    availableSlot: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request");
+            }
+            const { merchantId, date } = req.body
+            const check = await getAvalableSlot(merchantId, date);
+            return check ? success(res, "available slots", check) : badRequest(res, "bad request");
+        } catch (error) {
+            return unknownError(res, "unknown error");
         }
     }
 }

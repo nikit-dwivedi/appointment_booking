@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 //-------------------------------middleware-----------------------------//
 const { parseJwt, generateAdminToken, encryption, checkEncryption, } = require("../middleware/authToken");
 //--------------------------------helpers-------------------------------//
-const { addAdmin, getAdminByEmail } = require("../helpers/admin.helpers");
+const { addAdmin, getAdminByEmail, addCategory } = require("../helpers/admin.helpers");
 const { unknownError, success, badRequest, created } = require("../helpers/response.helper");
 const { allMerchant, merchantById } = require("../helpers/merchant.helpers");
 //------------------------------functions-------------------------------//
@@ -43,7 +43,22 @@ module.exports = {
       unknownError(res, "unknown error");
     }
   },
-  
+
+  addNewCategory: async (req, res) => {
+    try {
+      const error = validationResult(req);
+      if (!error.isEmpty()) {
+        return badRequest(res, "bad request");
+      }
+      const { categoryName } = req.body;
+      const saveCategory = await addCategory(categoryName);
+      return saveCategory ? success(res, "category added") : badRequest(res, "category not added");
+
+    } catch (error) {
+      return unknownError(res, "unknow error")
+    }
+  },
+
   getMerchantById: async (req, res) => {
     try {
       const error = validationResult(req);
