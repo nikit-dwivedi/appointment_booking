@@ -3,7 +3,7 @@ const { generateMerchantToken, checkEncryption, parseJwt } = require('../middlew
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addClient, checkLogin, editClient, clientByEmail, clientById } = require('../helpers/client.helpers')
 const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
-const { allMerchantByCategory, merchantCategoryList, getAvalableSlot } = require('../helpers/merchant.helpers')
+const { allMerchantByCategory, merchantCategoryList, getAvalableSlot, getFeaturedMerchant, getTestimony } = require('../helpers/merchant.helpers')
 
 
 module.exports = {
@@ -71,8 +71,8 @@ module.exports = {
             }
             const data = {
                 categoryList: await merchantCategoryList(),
-                feturedMerchant: [],
-                testomony: []
+                feturedMerchant: await getFeaturedMerchant(),
+                testomony: await getTestimony()
             }
             return data.categoryList ? success(res, "success", data) : badRequest(res, "bad request");
         } catch (error) {

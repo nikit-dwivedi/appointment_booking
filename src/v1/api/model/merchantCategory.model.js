@@ -6,6 +6,12 @@ const merchantTypeSchema = new Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+    },
+    description: {
+        type: String
+    }
 })
 
 const dataModel = mongoose.model('merchantType', merchantTypeSchema)

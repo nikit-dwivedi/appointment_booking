@@ -1,6 +1,7 @@
 const merchantModel = require('../model/merchant.models');
 const categoryModel = require('../model/merchantCategory.model')
 const bookingModel = require('../model/booking');
+const testimonyModel = require('../model/testimony.model')
 const { randomBytes } = require('crypto');
 const { encryption, generateMerchantToken } = require('../middleware/authToken');
 const { sort } = require('../service/funtions');
@@ -58,6 +59,22 @@ module.exports = {
             return false;
         }
     },
+    addFeaturedMerchant: async (merchantId) => {
+        try {
+            const changeData = await merchantModel.findOneAndUpdate({ merchantId }, { isFeatured: true });
+            return changeData ? true : false;
+        } catch (error) {
+            return false
+        }
+    },
+    removeFeaturedMerchant: async (merchantId) => {
+        try {
+            const changeData = await merchantModel.findOneAndUpdate({ merchantId }, { isFeatured: false });
+            return changeData ? true : false;
+        } catch (error) {
+            return false
+        }
+    },
     allMerchantByCategory: async (category) => {
         try {
             let filter = { merchantType: category }
@@ -92,11 +109,26 @@ module.exports = {
             const { availability } = await merchantModel.findOne({ merchantId }).select(`availability.${day} -_id`)
             const bookedSlot = bookingData.map(({ time }) => time)
             const servingSlot = availability[`${day}`]
-            const sortedArray = sort(bookedSlot,servingSlot)
+            const sortedArray = sort(bookedSlot, servingSlot)
             return sortedArray
         } catch (error) {
             return false
         }
+    },
+    getFeaturedMerchant:async()=>{
+        try {
+            const merchantData = await merchantModel.find({isFeatured:true}).select('merchantId firstName lastName merchantPhoto merchantType description -_id');
+            return merchantData[0] ? merchantData : false;
+        } catch (error) {
+            return false
+        }
+    },
+    getTestimony:async()=>{
+        try {
+            const merchantData = await testimonyModel.find().select('-_id -__v');
+            return merchantData[0] ? merchantData : false;
+        } catch (error) {
+            return false
+        }
     }
-
 }
