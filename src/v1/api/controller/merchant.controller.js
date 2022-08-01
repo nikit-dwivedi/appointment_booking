@@ -24,6 +24,7 @@ module.exports = {
             if (merchantCheck) {
                 return badRequest(res, "merchant already registerd");
             }
+            console.log(req.body);
             const saveData = await addMerchant(req.body);
             return saveData ? success(res, "merchant registered successfully", saveData) : badRequest(res, "bad request");
         } catch (err) {
@@ -104,7 +105,7 @@ module.exports = {
             if (!errors.isEmpty()) {
                 return badRequest(res, "bad request")
             }
-            const {merchantId} = parseJwt(req.headers.authorization);
+            const { merchantId } = parseJwt(req.headers.authorization);
             const editedData = await editMerchant(merchantId, req.body);
             return editedData ? success(res, "details update sucessfully") : badRequest(res, "bad Request ")
         } catch (err) {

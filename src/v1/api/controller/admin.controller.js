@@ -10,10 +10,12 @@ const { allMerchant, merchantById, addFeaturedMerchant, removeFeaturedMerchant }
 module.exports = {
 
   addAdmin: async (req, res) => {
-    const { email, password } = req.body;
-    const data = { email: email, userId: "userno1" };
-    const token = await generateAdminToken(data);
-    created(res, "admin added", token);
+    try {
+      const token = await addAdmin(data);
+      created(res, "admin added", token);
+    } catch (error) {
+      return unknownError(res, "unknown error")
+    }
   },
 
   login: async (req, res) => {

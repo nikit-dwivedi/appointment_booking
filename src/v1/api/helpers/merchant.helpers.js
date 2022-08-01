@@ -29,6 +29,7 @@ module.exports = {
             }
             const token = await generateMerchantToken(formattedData)
             const saveData = await merchantModel(formattedData);
+            console.log(saveData);
             return saveData.save() ? token : false
         } catch (error) {
             return false
@@ -115,15 +116,15 @@ module.exports = {
             return false
         }
     },
-    getFeaturedMerchant:async()=>{
+    getFeaturedMerchant: async () => {
         try {
-            const merchantData = await merchantModel.find({isFeatured:true}).select('merchantId firstName lastName merchantPhoto merchantType description -_id');
+            const merchantData = await merchantModel.find({ isFeatured: true }).select('merchantId firstName lastName merchantPhoto merchantType description -_id');
             return merchantData[0] ? merchantData : false;
         } catch (error) {
             return false
         }
     },
-    getTestimony:async()=>{
+    getTestimony: async () => {
         try {
             const merchantData = await testimonyModel.find().select('-_id -__v');
             return merchantData[0] ? merchantData : false;
