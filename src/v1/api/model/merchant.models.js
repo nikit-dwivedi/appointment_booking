@@ -12,7 +12,7 @@ const availability = new Schema({
         type: Array,
 
     },
-    Thus: {
+    Thu: {
         type: Array,
 
     },

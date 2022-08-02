@@ -107,9 +107,10 @@ module.exports = {
             let dateData = new Date(date)
             let day = dateData.toString().split(" ")[0]
             const bookingData = await bookingModel.find({ merchantId, date }).select("time -_id")
-            const { availability } = await merchantModel.findOne({ merchantId }).select(`availability.${day} -_id`)
+            const { availability } = await merchantModel.findOne({ merchantId })
             const bookedSlot = bookingData.map(({ time }) => time)
             const servingSlot = availability[`${day}`]
+            // console.log(availability,"=============",day);
             const sortedArray = sort(bookedSlot, servingSlot)
             return sortedArray
         } catch (error) {

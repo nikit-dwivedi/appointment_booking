@@ -1,4 +1,5 @@
 function sort(bookedSlot,servingSlot) {
+    // console.log(bookedSlot,"==============",servingSlot);
     let ans = []
     servingSlot.forEach(element => {
         if (!bookedSlot.includes(element)) {
