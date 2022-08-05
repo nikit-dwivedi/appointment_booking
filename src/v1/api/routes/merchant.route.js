@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const{merchantRegistration,login,logout, getAllMerchant, getMerchantCategory, getMerchantById,  editMerchantDetails, changeStatus}=require('../controller/merchant.controller');
+const{merchantRegistration,login,logout, getAllMerchant, getMerchantCategory, getMerchantById,  editMerchantDetails, changeStatus, getRatingOfMerchant}=require('../controller/merchant.controller');
 const { authenticateMerchant,} = require("../middleware/authToken");
 const{validateRegister} = require('../validation/merchantRegistration.validation')
 
@@ -15,7 +15,7 @@ router.get('/logout',authenticateMerchant,logout)
 router.get('/all',getAllMerchant)
 router.post('/update',authenticateMerchant,editMerchantDetails)
 router.post('/bookingStatus',authenticateMerchant,changeStatus)
+router.get('/review',authenticateMerchant,getRatingOfMerchant)
 // router.patch('/addbuissness',authenticateMerchant,buissnessRegister)
-// router.get('/get',authenticateMerchant,getBuisnessById)
 
 module.exports = router;

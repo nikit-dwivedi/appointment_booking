@@ -5,6 +5,7 @@ const { generateMerchantToken, checkEncryption, parseJwt } = require('../middlew
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addMerchant, merchantCategoryList, merchantByEmail, merchantById, editMerchant } = require('../helpers/merchant.helpers')
 const { changeBookingStatus, markBookingDone } = require('../helpers/booking.helpers')
+const { getRating } = require('../helpers/review.helpers')
 
 
 
@@ -144,4 +145,18 @@ module.exports = {
             return badRequest(res, "something went  wrong")
         }
     },
+    getRatingOfMerchant: async (req, res) => {
+        try {
+            const error = validationResult(req)
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request")
+            }
+            const token = parseJwt(req.headers.authorization)
+            const reviewList = await getRating(token.merchantId)
+            return reviewList ? success(res, "here are the list", reviewList) : badRequest(res, "bad request")
+        }
+        catch (error) {
+            return unknownError(res, "unknown error")
+        }
+    }
 }

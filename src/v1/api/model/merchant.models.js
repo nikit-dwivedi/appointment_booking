@@ -28,6 +28,14 @@ const availability = new Schema({
     }
 })
 
+const reviewSchema = new Schema({
+    clientId: { type: String },
+    clientName: { type: String },
+    clientProfileImage: { type: String },
+    rating: { type: Number },
+    review: { type: String },
+    isActive: { type: Boolean, default: true }
+})
 
 const merchantRegisterSchema = new Schema({
     merchantId: { type: String, },
@@ -44,6 +52,8 @@ const merchantRegisterSchema = new Schema({
     basePrice: { type: String },
     merchantType: { type: String },
     merchantSubType: { type: String },
+    overAllRating: { type: Number, default: 0 },
+    reviewList: [{ type: reviewSchema, default: [] }],
     isLogin: { type: Boolean, default: true },
     isActive: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },

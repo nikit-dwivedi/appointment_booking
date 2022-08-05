@@ -30,6 +30,9 @@ const clientRegistraionSchema = new Schema({
     dob: {
         type: String,
     },
+    profileImage: {
+        type: String,
+    },
     isActive: {
         type: Boolean,
         default: true,
