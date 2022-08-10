@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { registerClient, clientLogin, getClientById, editClientInfo, bookAppointment, bookingDetails, allBoooking, getAllMerchantByCategory, homeScreen, availableSlot } = require('../controller/client.controller.js');
+const { registerClient, clientLogin, getClientById, editClientInfo, bookAppointment, bookingDetails, allBoooking, getAllMerchantByCategory, homeScreen, availableSlot, addReviewOfMerchant } = require('../controller/client.controller.js');
 const { authenticateUser } = require("../middleware/authToken.js");
 
 router.post('/register', registerClient);
@@ -15,6 +15,7 @@ router.get('/booking/:bookingId', authenticateUser, bookingDetails);
 router.get('/home', homeScreen);
 router.get('/service/:category', getAllMerchantByCategory)
 router.post('/check', availableSlot)
+router.post('/review/add',authenticateUser,addReviewOfMerchant)
 
 
 module.exports = router;

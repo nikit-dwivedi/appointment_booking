@@ -1,9 +1,10 @@
 const { validationResult } = require('express-validator')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
-const { badRequest, success, unknownError } = require('../helpers/response.helper')
+const { badRequest, success, unknownError, created } = require('../helpers/response.helper')
 const { addClient, checkLogin, editClient, clientByEmail, clientById } = require('../helpers/client.helpers')
 const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
 const { allMerchantByCategory, merchantCategoryList, getAvalableSlot, getFeaturedMerchant, getTestimony } = require('../helpers/merchant.helpers')
+const { addRating } = require('../helpers/review.helpers')
 
 
 module.exports = {
@@ -141,6 +142,19 @@ module.exports = {
             const { merchantId, date } = req.body
             const check = await getAvalableSlot(merchantId, date);
             return check ? success(res, "available slots", check) : badRequest(res, "bad request");
+        } catch (error) {
+            return unknownError(res, "unknown error");
+        }
+    },
+    addReviewOfMerchant: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request");
+            }
+            const token = parseJwt(req.headers.authorization);
+            const review = await addRating(token.clientId, req.body);
+            return review ? created(res, "review added") : badRequest(res, "review not added")
         } catch (error) {
             return unknownError(res, "unknown error");
         }
