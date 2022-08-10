@@ -4,7 +4,7 @@ const bookindAppoinment = require('../model/booking')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError } = require('../helpers/response.helper')
 const { addMerchant, merchantCategoryList, merchantByEmail, merchantById, editMerchant } = require('../helpers/merchant.helpers')
-const { changeBookingStatus, markBookingDone } = require('../helpers/booking.helpers')
+const { changeBookingStatus, markBookingDone, getMerchantBooking } = require('../helpers/booking.helpers')
 
 
 
@@ -144,4 +144,17 @@ module.exports = {
             return badRequest(res, "something went  wrong")
         }
     },
+    merchantBooking: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request")
+            }
+            const tokenData = parseJwt(req.headers.authorization)
+            const bookingList = await getMerchantBooking(tokenData.merchantId)
+            return bookingList ? success(res, "booking list", bookingList) : badRequest(res, "no booking found", []);
+        } catch (error) {
+            return unknownError(res, "unknown error");
+        }
+    }
 }

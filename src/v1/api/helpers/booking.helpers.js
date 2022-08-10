@@ -1,11 +1,11 @@
 const bookingModel = require('../model/booking');
 
 module.exports = {
-    addBooking: async (bookingData,clientId) => {
+    addBooking: async (bookingData, clientId) => {
         try {
             const formatedData = {
                 clientId: clientId,
-                merchantId:bookingData.merchantId,
+                merchantId: bookingData.merchantId,
                 clientName: bookingData.clientName,
                 clientNumber: bookingData.clientNumber,
                 amount: bookingData.amount,
@@ -15,7 +15,7 @@ module.exports = {
             const saveData = await bookingModel(formatedData);
             return await saveData.save() ? saveData._id : false;
         }
-        catch (error){
+        catch (error) {
             return false;
         }
     },
@@ -24,13 +24,13 @@ module.exports = {
             const bookingData = await bookingModel.find({ clientId });
             return bookingData[0] ? bookingData : false;
         }
-        catch (error){
+        catch (error) {
             return false
         }
     },
     getMerchantBooking: async (merchantId) => {
         try {
-            const bookingData = await bookingModel.find({ merchantId });
+            const bookingData = await bookingModel.find({ merchantId }).select('-__v')
             return bookingData[0] ? bookingData : false;
         } catch {
             return false;
@@ -46,7 +46,7 @@ module.exports = {
     },
     changeBookingStatus: async (bookingId, status) => {
         try {
-            const statusChange = await bookingModel.findByIdAndUpdate( bookingId , { status });
+            const statusChange = await bookingModel.findByIdAndUpdate(bookingId, { status });
             return statusChange ? true : false;
         } catch {
             return false
@@ -60,17 +60,17 @@ module.exports = {
             return false
         }
     },
-    bookingdetailsById: async (bookingId,clientId) => {
+    bookingdetailsById: async (bookingId, clientId) => {
         try {
-            const bookingData = await bookingModel.findOne({$and:[{_id:bookingId},{clientId}]});
+            const bookingData = await bookingModel.findOne({ $and: [{ _id: bookingId }, { clientId }] });
             return bookingData ? bookingData : false;
-        } catch (error){
+        } catch (error) {
             return false
         }
     },
-    changeAvailability:async (merchantId,bodyData)=>{
-        const formatedData={
-            
+    changeAvailability: async (merchantId, bodyData) => {
+        const formatedData = {
+
         }
     }
 }
