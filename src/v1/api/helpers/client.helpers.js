@@ -1,6 +1,7 @@
 const clientModel = require('../model/client.model.js');
 const { randomBytes } = require('node:crypto');
 const { encryption, generateUserToken, checkEncryption } = require('../middleware/authToken');
+const { initPayment } = require('../service/paymet.service.js');
 
 module.exports = {
     addClient: async (clientData) => {
@@ -90,6 +91,16 @@ module.exports = {
             return false;
         }
         catch (error) {
+            return false
+        }
+    },
+    payment: async (bodyData) => {
+        try {
+            const paymentData = await initPayment(bodyData.email, bodyData.name, bodyData.amount);
+            if (paymentData) {
+                
+            }
+        } catch (error) {
             return false
         }
     }

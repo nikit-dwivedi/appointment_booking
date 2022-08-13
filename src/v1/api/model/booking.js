@@ -16,6 +16,11 @@ const bookingAppointmentSchema = new Schema({
         enum: ["pending", "approved", "rejected"],
         default: "pending"
     },
+    paymentStatus: {
+        type: String,
+        enum: ["paid", "refunded"],
+        default: "paid"
+    },
     isCompleted: {
         type: Boolean,
         defalut: false
