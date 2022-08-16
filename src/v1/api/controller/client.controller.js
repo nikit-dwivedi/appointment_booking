@@ -5,6 +5,7 @@ const { addClient, checkLogin, editClient, clientByEmail, clientById } = require
 const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
 const { allMerchantByCategory, merchantCategoryList, getAvalableSlot, getFeaturedMerchant, getTestimony } = require('../helpers/merchant.helpers')
 const { addRating } = require('../helpers/review.helpers')
+const { payment } = require('../helpers/transaction.helper')
 
 
 module.exports = {
@@ -19,7 +20,6 @@ module.exports = {
                 return badRequest(res, "client already registered")
             }
             const token = await addClient(req.body);
-            // const token = true
             return token ? success(res, "user created successfully", token) : badRequest(res, "bad request");
         } catch (error) {
             return unknownError(res, "unknown error");
@@ -157,6 +157,19 @@ module.exports = {
             return review ? created(res, "review added") : badRequest(res, "review not added")
         } catch (error) {
             return unknownError(res, "unknown error");
+        }
+    },
+    makePayment: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "bad request")
+            }
+            const token = parseJwt(req.headers.authorization);
+            const paymentDetails = await payment(token.clientId, req.body, "booking");
+            return paymentDetails ? success(res, "payment success", paymentDetails) : badRequest(res, "payment failed");
+        } catch (error) {
+            return unknownError(res, "unknown error")
         }
     }
 }

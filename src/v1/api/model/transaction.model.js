@@ -12,8 +12,19 @@ const transactionSchema = new Schema({
     amount: {
         type: Number
     },
-    type:{
-        type:String,
-        enum:["booking","refund","payout","failed"]
+    type: {
+        type: String,
+        enum: ["booking", "refund", "payout", "failed"]
+    },
+    paymentId: {
+        type: String,
+    },
+    paymentIntent: {
+        type: String
+    },
+    ephemeralKey: {
+        type: String
     }
 })
+const transactionModel = mongoose.model('transactions', transactionSchema);
+module.exports = transactionModel;
