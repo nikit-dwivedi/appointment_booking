@@ -55,7 +55,7 @@ module.exports = {
     },
     changeBookingStatus: async (bookingId, status) => {
         try {
-            const statusChange = await bookingModel.findByIdAndUpdate(bookingId, { status });
+            const statusChange = await bookingModel.findByIdAndUpdate(bookingId, { status, showAcceptReject: false });
             return statusChange ? true : false;
         } catch {
             return false
