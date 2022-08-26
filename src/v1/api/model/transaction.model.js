@@ -9,6 +9,9 @@ const transactionSchema = new Schema({
     merchantId: {
         type: String
     },
+    name: {
+        type: String
+    },
     amount: {
         type: Number
     },

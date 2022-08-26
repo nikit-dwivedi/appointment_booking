@@ -1,13 +1,14 @@
+require('dotenv').config()
 const stripe_secret = process.env.STRIPE_SECRET_KEY
 const stripe_publisher = process.env.STRIPE_PUBLISHER_KEY
 const stripe = require('stripe')(stripe_secret)
 
 
-const initPayment = async (email, name, amount) => {
+const initPayment = async (name, amount) => {
     try {
+        console.log(stripe_secret);
         const customer = await stripe.customers.create({
             name: name,
-            email: email
         })
         const ephemeralKey = await stripe.ephemeralKeys.create(
             { customer: customer.id },
@@ -29,7 +30,7 @@ const initPayment = async (email, name, amount) => {
         }
         return data
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return false
     }
 }

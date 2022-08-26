@@ -1,20 +1,24 @@
 const transactionModel = require('../model/transaction.model');
 const { initPayment } = require("../service/paymet.service");
+const { clientById } = require('./client.helpers');
 
 module.exports = {
     payment: async (clientId, bodyData, type) => {
         try {
-            const paymentData = await initPayment(bodyData.email, bodyData.name, bodyData.amount);
+            const { firstName, lastName } = await clientById(clientId);
+            const name = `${firstName} ${lastName}`;
+            const paymentData = await initPayment(name, bodyData.amount);
             if (paymentData) {
                 const formattedData = {
                     clientId: clientId,
                     merchantId: bodyData.merchantId,
+                    name: name,
                     amount: bodyData.amount,
                     type: type,
                     paymentId: paymentData.customer,
                     paymentIntent: paymentData.paymentIntent,
                     ephemeralKey: paymentData.ephemeralKey,
-                    publishableKey:paymentData.publishableKey
+                    publishableKey: paymentData.publishableKey
                 }
                 const saveData = await transactionModel(formattedData);
                 return await saveData.save() ? saveData : false;

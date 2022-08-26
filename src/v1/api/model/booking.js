@@ -16,6 +16,10 @@ const bookingAppointmentSchema = new Schema({
         enum: ["pending", "approved", "rejected"],
         default: "pending"
     },
+    showAcceptReject: {
+        type: Boolean, 
+        default: true
+    },
     paymentStatus: {
         type: String,
         enum: ["paid", "refunded"],
@@ -32,9 +36,27 @@ const bookingAppointmentSchema = new Schema({
         type: String,
         required: true
     },
+    merchantName: {
+        type: String
+    },
+    merchantNumber: {
+        type: String
+    },
+    merchnatLocation: {
+        type: String
+    },
     clientId: {
         type: String,
         required: true
+    },
+    clientName: {
+        type: String,
+    },
+    clientEmail: {
+        type: String
+    },
+    clientNumber: {
+        type: String
     }
 })
 

@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator')
 const { generateMerchantToken, checkEncryption, parseJwt } = require('../middleware/authToken')
 const { badRequest, success, unknownError, created } = require('../helpers/response.helper')
 const { addClient, checkLogin, editClient, clientByEmail, clientById } = require('../helpers/client.helpers')
-const { addBooking, getClientBooking, bookingdetailsById } = require('../helpers/booking.helpers')
+const { addBooking, getClientBooking, bookingdetailsById, clientBookingdetailsById } = require('../helpers/booking.helpers')
 const { allMerchantByCategory, merchantCategoryList, getAvalableSlot, getFeaturedMerchant, getTestimony } = require('../helpers/merchant.helpers')
 const { addRating } = require('../helpers/review.helpers')
 const { payment } = require('../helpers/transaction.helper')
@@ -127,7 +127,7 @@ module.exports = {
             }
             const { bookingId } = req.params;
             const { clientId } = parseJwt(req.headers.authorization)
-            const bookingData = await bookingdetailsById(bookingId, clientId);
+            const bookingData = await clientBookingdetailsById(bookingId, clientId);
             return bookingData ? success(res, "booking data", bookingData) : badRequest(res, "bad request");
         } catch {
             unknownError(res, "unknow error ")

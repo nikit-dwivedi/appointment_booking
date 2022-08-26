@@ -132,5 +132,13 @@ module.exports = {
         } catch (error) {
             return false
         }
+    },
+    allMerchant: async () => {
+        try {
+            const merchantList = await merchantModel.find().select('-id -__v');
+            return merchantList[0] ? merchantList : false ;
+        } catch (error) {
+            return false
+        }
     }
 }
