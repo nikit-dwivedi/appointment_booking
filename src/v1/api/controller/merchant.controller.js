@@ -145,7 +145,19 @@ module.exports = {
             return badRequest(res, "something went  wrong")
         }
     },
-
+    bookingComplete:async(req,res)=>{
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return badRequest(res, "bad Request")
+            }
+            const { bookingId } = req.body
+            const changeStatus = await markBookingDone(bookingId);
+            return changeStatus ? success(res, "bookin status change successfully") : badRequest(res, "bad Request")
+        } catch (err) {
+            return badRequest(res, "something went  wrong")
+        }
+    },
     merchantBooking: async (req, res) => {
         try {
             const error = validationResult(req);
