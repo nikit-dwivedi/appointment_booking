@@ -17,7 +17,7 @@ const bookingAppointmentSchema = new Schema({
         default: "pending"
     },
     showAcceptReject: {
-        type: Boolean, 
+        type: Boolean,
         default: true
     },
     paymentStatus: {
@@ -27,7 +27,7 @@ const bookingAppointmentSchema = new Schema({
     },
     isCompleted: {
         type: Boolean,
-        defalut: false
+        default: false
     },
     amount: {
         type: Number,
